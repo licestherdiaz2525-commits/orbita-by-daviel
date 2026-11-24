@@ -1,7 +1,7 @@
 <!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atmósfera en 3D · Órbita by Daviel</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0e1116;color:#f6f1eb;font:16px/1.45 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:clamp(12px,3vw,32px)}button,select,input{font:inherit;accent-color:#ff984a}button,select{background:#202833;color:#f9f6ef;border:1px solid #505c68;border-radius:9px;padding:8px 13px;cursor:pointer}button[aria-pressed=true],#play{background:#ff9f58;color:#1e140b;border-color:#ff9f58}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #6fd7ed}h1{font-size:clamp(26px,5vw,48px);font-weight:560;letter-spacing:-.045em;margin:8px 0 14px}p{margin:8px 0;color:#c5ced6}nav,.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.scene{position:relative;overflow:hidden;border:1px solid #43505b;border-radius:17px;background:#0c2637;margin:14px 0}canvas{width:100%;height:clamp(280px,45vw,470px);display:block;touch-action:none;cursor:grab}.stamp{position:absolute;left:14px;top:13px;color:#fff;font:600 12px/1.25 system-ui;letter-spacing:.07em;border-radius:15px;background:#0b1a27d9;padding:6px 12px;pointer-events:none}.panel{padding:15px;background:#192028;border:1px solid #333e48;border-radius:12px;margin:10px 0}.sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:12px}label{font-size:14px;color:#dbe2e8}label input[type=range]{width:100%;display:block}h2{font-size:21px;margin:0}a{color:#ffb378}small{color:#a8bac6}#story{min-height:2.8em}#seek{flex:1;min-width:95px}.row+.row{margin-top:12px}output{float:right;color:#ffc698}
-.live-caption{position:absolute;inset:auto 0 0;background:linear-gradient(transparent,#071622e8 32%);padding:24px 15px 10px;color:#f1f6f7;pointer-events:none;font-size:clamp(13px,2vw,17px)}.live-caption small{color:#ffb777;font-weight:700;margin-right:10px}#chapters{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}#chapters button{font-size:13px}details{padding:12px 0;color:#c5ced6}summary{cursor:pointer;color:#ffc18c}#phaseName{display:block;font-size:clamp(20px,3vw,30px);line-height:1.16;color:#fff;margin:3px 0;text-shadow:0 1px 6px #000}.live-caption{background:linear-gradient(transparent,#091923f5 35%);padding-top:36px}#chapter{letter-spacing:.04em}</style><main><small>ÓRBITA by Daviel</small><h1 id="title"></h1><nav id="modes"></nav><div class="scene"><canvas id="view" role="img"></canvas><span class="stamp" id="stamp"></span><div class="live-caption" aria-live="polite"><small id="chapter"></small><strong id="phaseName"></strong><span id="caption"></span></div></div><div class="panel"><div class="row" id="presets"></div><div id="weatherOptions" class="row" style="margin-top:10px"><button id="orbit"></button><label id="catLabel"></label><select id="category"></select><small id="winds"></small></div><div class="sliders" id="ranges"></div><div class="row" style="margin-top:12px" id="layers"></div></div><div class="panel"><div class="row"><button id="play"></button><button id="reset"></button><select id="speed"></select><input id="seek" type="range" min="0" max="1000" value="1000"></div></div><div id="chapters"></div><details id="ny"><summary></summary><p></p><a href="https://www.nyc.gov/site/em/ready/be-ready-new-york.page" target="_blank" rel="noopener">NYC Emergency Management ↗</a></details><h2 id="stage"></h2><p id="story"></p><small id="note"></small> · <a id="source" target="_blank" rel="noopener"></a><p><small><a href="https://www.nhc.noaa.gov/aboutsshws.php">Saffir–Simpson · NHC</a> · <a href="https://github.com/mrdoob/three.js/blob/dev/examples/textures/planets/earth_atmos_2048.jpg">Earth texture · three.js</a></small></p></main>
+.live-caption{position:absolute;inset:auto 0 0;background:linear-gradient(transparent,#071622e8 32%);padding:24px 15px 10px;color:#f1f6f7;pointer-events:none;font-size:clamp(13px,2vw,17px)}.live-caption small{color:#ffb777;font-weight:700;margin-right:10px}#chapters{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}#chapters button{font-size:13px}details{padding:12px 0;color:#c5ced6}summary{cursor:pointer;color:#ffc18c}#phaseName{display:block;font-size:clamp(20px,3vw,30px);line-height:1.16;color:#fff;margin:3px 0;text-shadow:0 1px 6px #000}.live-caption{background:linear-gradient(transparent,#091923f5 35%);padding-top:36px}#chapter{letter-spacing:.04em}</style><link href="trinity.css" rel="stylesheet"><main><small>ÓRBITA by Daviel</small><h1 id="title"></h1><nav id="modes"></nav><section id="trinityArchive" hidden></section><div id="legacyLab"><div class="scene"><canvas id="view" role="img"></canvas><span class="stamp" id="stamp"></span><div class="live-caption" aria-live="polite"><small id="chapter"></small><strong id="phaseName"></strong><span id="caption"></span></div></div><div class="panel"><div class="row" id="presets"></div><div id="weatherOptions" class="row" style="margin-top:10px"><button id="orbit"></button><label id="catLabel"></label><select id="category"></select><small id="winds"></small></div><div class="sliders" id="ranges"></div><div class="row" style="margin-top:12px" id="layers"></div></div><div class="panel"><div class="row"><button id="play"></button><button id="reset"></button><select id="speed"></select><input id="seek" type="range" min="0" max="1000" value="1000"></div></div><div id="chapters"></div><details id="ny"><summary></summary><p></p><a href="https://www.nyc.gov/site/em/ready/be-ready-new-york.page" target="_blank" rel="noopener">NYC Emergency Management ↗</a></details><h2 id="stage"></h2><p id="story"></p><small id="note"></small> · <a id="source" target="_blank" rel="noopener"></a><p><small><a href="https://www.nhc.noaa.gov/aboutsshws.php">Saffir–Simpson · NHC</a> · <a href="https://github.com/mrdoob/three.js/blob/dev/examples/textures/planets/earth_atmos_2048.jpg">Earth texture · three.js</a></small></p></div></main>
 <script>
 'use strict';
 const en=new URLSearchParams(location.search).get('lang')==='en',t=(a,b)=>en?b:a,$=s=>document.querySelector(s);
@@ -26,7 +26,7 @@ const archive=[
 [t('Columna ascendente','Rising column'),t('El gas caliente y menos denso asciende. El aire y el polvo arrastrados desde abajo hacen visible una columna bajo la nube.','Hot, less dense gas rises. Air and dust drawn up from below make a column visible beneath the cloud.')],
 [t('Nube en expansión','Spreading cloud'),t('La parte superior se ensancha. Sus bordes se enrollan al mezclarse con el aire que la rodea. La forma y el color cambian mientras se enfría.','The top spreads outward. Its edges roll as they mix with surrounding air. The shape and color change as the cloud cools.')]];
 function btn(parent,name,fun){let b=document.createElement('button');b.textContent=name;b.onclick=fun;parent.append(b);return b}
-const modeBtns=[t('Huracán','Hurricane'),t('Archivo nuclear · Trinity','Nuclear archive · Trinity'),t('Nueva York · Refugio','New York · Shelter')].map((s,i)=>btn($('#modes'),s,()=>{mode=i;p=0;playing=false;cut=false;preset(0);update()}));
+const modeBtns=[t('Huracán','Hurricane'),t('Archivo nuclear · Trinity','Nuclear archive · Trinity'),t('Nueva York · Refugio','New York · Shelter')].map((label,index)=>btn($('#modes'),label,()=>selectLab(index,true)));
 const angles=[[18,42,.87],[0,89,.86],[35,13,1.1],[65,39,.56]];
 let presets=[t('Oblicua','Oblique'),t('Desde arriba','Overhead'),t('De lado','Side'),t('Desde lejos','Distant')].map((s,i)=>btn($('#presets'),s,()=>preset(i)));
 let space=false,category=3;
@@ -71,7 +71,7 @@ $('#ny p').textContent=t('La onda de presión puede romper ventanas y dañar est
 function update(){explain();$('#weatherOptions').style.display=mode?'none':'flex';$('#winds').textContent=t('Viento sostenido al madurar · ','Sustained wind at maturity · ')+windRanges[category-1]+' km/h';let history=mode===1,st=history?archive[Math.min(2,Math.floor(p*3))]:stages[Math.min(3,Math.floor(p*4))];$('#title').textContent=titles[mode];$('#stamp').textContent=history?'TRINITY / 1945':t('ATLÁNTICO NORTE','NORTH ATLANTIC');canvas.setAttribute('aria-label',titles[mode]);$('#stage').textContent=st[0]+(!mode&&p>=.75?t(' · Categoría ',' · Category ')+category:'');$('#story').textContent=st[1];$('#layers').style.display=history?'none':'flex';$('#note').textContent=history?t('Reconstrucción artística sin escala física. Fuente histórica','Artistic reconstruction without physical scale. Historical source'):t('Modelo educativo con altura exagerada. Arrastra para girar. Fuente','Educational model with exaggerated height. Drag to orbit. Source');$('#source').textContent=history?'U.S. Department of Energy':'NOAA';$('#source').href=history?'https://www.energy.gov/lm/trinity-site-worlds-first-nuclear-explosion':'https://www.noaa.gov/jetstream/tropical/tropical-cyclone-introduction/tropical-cyclone-structure';if(mode===2){const lesson=lessons[2][activeLesson];$('#stage').textContent=lesson[1];$('#story').textContent=t('Escena ilustrativa de una calle de Nueva York. El color señala material radiactivo invisible a simple vista. La densidad de puntos no mide una dosis.','Illustration of a New York street. Color marks radioactive material that cannot be seen with the naked eye. Dot density does not measure a dose.');$('#stamp').textContent='NEW YORK';$('#layers').style.display='none';$('#note').textContent=t('Guía de protección civil','Emergency preparedness guide');$('#source').textContent='NYC Emergency Management';$('#source').href='https://www.nyc.gov/site/em/ready/be-ready-new-york.page'}modeBtns.forEach((b,i)=>b.setAttribute('aria-pressed',i===mode));$('#play').textContent=playing?t('Pausar','Pause'):p===1?t('Ver formación','Watch formation'):t('Reproducir','Play');$('#seek').value=p*1000;queue()}
 let drag=null;canvas.onpointerdown=e=>{canvas.setPointerCapture(e.pointerId);drag=[e.clientX,e.clientY,yaw,tilt]};canvas.onpointermove=e=>{if(!drag)return;yaw=((drag[2]+(e.clientX-drag[0])*.55+540)%360)-180;tilt=clamp(drag[3]-(e.clientY-drag[1])*.35,6,89);refresh()};canvas.onpointerup=canvas.onpointercancel=()=>drag=null;
 function queue(){if(!frame)frame=requestAnimationFrame(draw)}
-function draw(now){frame=0;if(playing){if(last)p=Math.min(1,p+Math.min(100,now-last)/32000*+$('#speed').value);last=now;if(p===1)playing=false;update()}
+function draw(now){frame=0;if($('#legacyLab').hidden)return;if(playing){if(last)p=Math.min(1,p+Math.min(100,now-last)/32000*+$('#speed').value);last=now;if(p===1)playing=false;update()}
 const w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(devicePixelRatio||1,1.6);if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);
 const elev=tilt*rad,cy=Math.cos(yaw*rad),sy=Math.sin(yaw*rad),ct=Math.cos(elev),st=Math.sin(elev),scale=Math.min(w/355,h/235)*zoom,origin=h*(mode?.69:.56);
 function proj(x,y,z){let side=x*cy-y*sy,depth=x*sy+y*cy;return [w/2+side*scale,origin+(depth*st-z*ct)*scale,depth*ct+z*st]}
@@ -112,5 +112,41 @@ function drawStreet(g,project,w,h,scale,progress){
  let [px,py]=project(x,y,2);g.strokeStyle='#ffab59';g.lineWidth=3;g.beginPath();g.arc(px,py,7,0,tau);g.stroke();g.fillStyle='#fff1cd';g.beginPath();g.arc(px,py,3,0,tau);g.fill();
  if(progress>=.58){g.font='600 13px system-ui';let label=t('Dentro del refugio','Inside shelter');let tw=g.measureText(label).width;g.fillStyle='#172622';g.fillRect(px-tw/2-5,py-30,tw+10,18);g.fillStyle='#f6ecdc';g.fillText(label,px-tw/2,py-17)}
 }
-new ResizeObserver(queue).observe(canvas);refresh();update();
+// The older chapter viewer also works if the optional 3D module cannot be fetched.
+let archiveViewer,archiveLoad;
+const archivePane=$('#trinityArchive');
+function selectLab(index,remember=false){
+    mode=index;
+    p=0; last=0; playing=false; cut=false;
+    const open=index===1;
+    archivePane.hidden=!open;
+    $('#legacyLab').hidden=open;
+    document.querySelector('main').classList.toggle('trinity-open',open);
+    if(archiveViewer)archiveViewer.setActive(open);
+    if(open&&!archiveLoad){
+        archivePane.textContent=t('Cargando el recorrido…','Loading the tour…');
+        archiveLoad=import('./trinity-view.js').then(({mountTrinity})=>{
+            archiveViewer=mountTrinity(archivePane,en);
+            archiveViewer.setActive(mode===1);
+        }).catch(()=>{
+            archiveLoad=null;
+            if(mode===1){
+                archivePane.hidden=true;
+                $('#legacyLab').hidden=false;
+                document.querySelector('main').classList.remove('trinity-open');
+                queue();
+            }
+        });
+    }
+    if(remember){
+        const url=new URL(location.href);
+        if(open)url.searchParams.set('vista','trinity');
+        else url.searchParams.delete('vista');
+        history.replaceState(null,'',url);
+    }
+    preset(0);
+    update();
+}
+new ResizeObserver(queue).observe(canvas);
+selectLab(new URLSearchParams(location.search).get('vista')==='trinity'?1:0);
 </script></html>
