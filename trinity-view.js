@@ -38,7 +38,7 @@ function makeFilmRenderer(canvas,onReady,onError){
     };
 }
 
-export function mountTrinity(root,english){
+export function mountTrinity(root,english,syncSound=()=>{}){
     const t=(spanish,eng)=>english?eng:spanish;
     const phases=[
         {name:t('Desde el espacio','From space'),image:'orbita',start:0,shot:0,
@@ -119,6 +119,7 @@ export function mountTrinity(root,english){
         if(active&&visible&&!document.hidden&&!pending) pending=requestAnimationFrame(draw);
     }
     function announce(){
+        syncSound(state.seconds-10,speed,playing && active && visible && !document.hidden && !photograph && Boolean(render));
         let phase=0;
         while(phase+1<phases.length&&state.seconds>=phases[phase+1].start)phase++;
         const current=photograph?-1:phase;
@@ -191,7 +192,7 @@ export function mountTrinity(root,english){
     play.onclick=togglePlay;
     el('.tr-reset').onclick=()=>seekTo(0);
     seek.oninput=()=>seekTo(Number(seek.value));
-    el('.tr-speed').onchange=e=>{speed=Number(e.target.value);previousTime=null;};
+    el('.tr-speed').onchange=e=>{speed=Number(e.target.value);previousTime=null;announce();};
     phaseButtons.forEach((button,i)=>button.onclick=()=>seekTo(phases[i].shot));
     photoButton.onclick=()=>{playing=false;photograph=!photograph;previousTime=null;controls();};
     // Terrain choices take visitors straight to the landscape if they are still in orbit.
@@ -276,10 +277,10 @@ export function mountTrinity(root,english){
     };
     document.addEventListener('fullscreenchange',syncExpanded);
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&player.classList.contains('tr-expanded'))toggleOverlay(false);});
-    document.addEventListener('visibilitychange',()=>{previousTime=null;lastDraw=0;requestDraw();});
+    document.addEventListener('visibilitychange',()=>{previousTime=null;lastDraw=0;announce();requestDraw();});
     new ResizeObserver(requestDraw).observe(stage);
     new IntersectionObserver(entries=>{
-        visible=entries[0].isIntersecting;previousTime=null;lastDraw=0;requestDraw();
+        visible=entries[0].isIntersecting;previousTime=null;lastDraw=0;announce();requestDraw();
     }).observe(stage);
     function startFilm(){
         usingFilm=true;gpu.hidden=true;film.hidden=false;
