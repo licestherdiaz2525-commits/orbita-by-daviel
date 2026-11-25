@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1016">
+  <meta name="description" content="Explora la Tierra en un globo 3D. Busca continentes y océanos, gira la cámara y acerca la superficie en Órbita by Daviel.">
+  <title>Globo terrestre en 3D · Órbita by Daviel</title>
+  <link rel="stylesheet" href="globo.css">
+  <link rel="preload" as="image" href="tierra.jpg">
+</head>
+<body>
+  <header class="mast">
+    <a class="brand" data-home href="index.html"><span class="brand-orbit" aria-hidden="true"></span><b>Órbita</b> <span>by Daviel</span></a>
+    <nav aria-label="Secciones" data-en-label="Sections">
+      <a data-atlas href="index.html#atlas" data-en="Solar system">Sistema solar</a>
+      <a data-storm href="atmosfera.html" data-en="Hurricanes">Huracanes</a>
+    </nav>
+    <div class="languages" aria-label="Idioma" data-en-label="Language">
+      <a lang="es" hreflang="es" href="globo.html" id="in-es" aria-label="Español">ES</a>
+      <a lang="en" hreflang="en" href="globo.html?lang=en" id="in-en" aria-label="English">EN</a>
+    </div>
+  </header>
+  <main>
+    <div class="intro">
+      <h1 data-en="Explore Earth in 3D">Explora la Tierra en 3D</h1>
+      <p data-en="Drag to rotate. Pinch or scroll to zoom in on the surface.">Arrastra para girar. Acerca la superficie con dos dedos o con la rueda del ratón.</p>
+    </div>
+    <section id="viewer" class="viewer" aria-label="Visor del globo terrestre" data-en-label="Earth globe viewer">
+      <div class="space">
+        <div id="surface" tabindex="0" role="group" aria-label="Globo interactivo" data-en-label="Interactive globe" aria-describedby="keyboard-help"></div>
+        <span id="keyboard-help" class="sr" data-en="Use the arrow keys to rotate, plus and minus to zoom, and Home to reset. Hold Shift and drag to pan.">Usa las flechas para girar, los signos más y menos para acercar o alejar y la tecla Inicio para restablecer. Mantén Mayús y arrastra para desplazar la vista.</span>
+        <p id="loading" class="loading" role="status" data-en="Loading Earth…">Cargando la Tierra…</p>
+        <button type="button" id="expand" class="expand" aria-label="Pantalla completa" data-en-label="Full screen" title="Pantalla completa">⛶</button>
+        <div class="view-info">
+          <span class="location-dot" aria-hidden="true"></span>
+          <div><strong id="region-name">Atlántico Norte</strong><span id="orientation" class="coords"></span></div>
+        </div>
+        <div class="camera" role="group" aria-label="Controles de cámara" data-en-label="Camera controls">
+          <button id="zoom-in" type="button" aria-label="Acercar" data-en-label="Zoom in" title="Acercar">+</button>
+          <output id="zoom-value" aria-label="Acercamiento" data-en-label="Zoom">1×</output>
+          <button id="zoom-out" type="button" aria-label="Alejar" data-en-label="Zoom out" title="Alejar">−</button>
+          <button id="reset" type="button" aria-label="Restablecer vista" data-en-label="Reset view" title="Restablecer vista">↺</button>
+        </div>
+      </div>
+      <aside class="tools" aria-label="Opciones del globo" data-en-label="Globe options">
+        <form id="region-search" role="search" autocomplete="off">
+          <label id="search-label" for="region-query" data-en="Find a region">Buscar una región</label>
+          <div class="search-box">
+            <span class="lens" aria-hidden="true"></span>
+            <input id="region-query" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="matches" placeholder="Continente, océano o región" spellcheck="false">
+            <button class="go" type="submit" aria-label="Centrar en la región" data-en-label="Center on region">→</button>
+          </div>
+          <ul id="matches" role="listbox" aria-labelledby="search-label" hidden></ul>
+          <p id="search-feedback" role="status" hidden></p>
+        </form>
+        <div class="presets" role="group" aria-label="Vistas rápidas" data-en-label="Quick views">
+          <button type="button" data-region="caribbean" data-en="Caribbean">Caribe</button>
+          <button type="button" data-region="africa" data-en="Africa">África</button>
+          <button type="button" data-region="pacific" data-en="Pacific">Pacífico</button>
+        </div>
+        <div class="layers">
+          <button type="button" id="graticule" aria-pressed="false"><i class="grid-icon" aria-hidden="true"></i><span data-en="Parallels and meridians">Paralelos y meridianos</span><i class="switch" aria-hidden="true"></i></button>
+          <button type="button" id="spin" aria-pressed="false"><i class="spin-icon" aria-hidden="true">⟳</i><span data-en="Auto-rotate">Giro automático</span><i class="switch" aria-hidden="true"></i></button>
+        </div>
+      </aside>
+    </section>
+    <footer><span data-en="Surface image · ">Imagen de la superficie · </span><a href="https://github.com/mrdoob/three.js/blob/dev/examples/textures/planets/earth_atmos_2048.jpg" rel="noopener" target="_blank">three.js ↗</a></footer>
+  </main>
+  <script type="module" src="globo.js"></script>
+</body>
+</html>

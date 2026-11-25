@@ -1,32 +1,46 @@
-<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atmósfera en 3D · Órbita by Daviel</title>
+<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Huracanes en 3D · Órbita by Daviel</title>
+<script>
+const route = new URLSearchParams(location.search);
+if (route.has('escena') || (route.has('vista') && route.get('vista') !== 'huracan')) {
+  location.replace('globo.html'+(route.get('lang') === 'en' ? '?lang=en' : ''));
+}
+</script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0e1116;color:#f6f1eb;font:16px/1.45 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:clamp(12px,3vw,32px)}button,select,input{font:inherit;accent-color:#ff984a}button,select{background:#202833;color:#f9f6ef;border:1px solid #505c68;border-radius:9px;padding:8px 13px;cursor:pointer}button[aria-pressed=true],#play{background:#ff9f58;color:#1e140b;border-color:#ff9f58}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #6fd7ed}h1{font-size:clamp(26px,5vw,48px);font-weight:560;letter-spacing:-.045em;margin:8px 0 14px}p{margin:8px 0;color:#c5ced6}nav,.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.scene{position:relative;overflow:hidden;border:1px solid #43505b;border-radius:17px;background:#0c2637;margin:14px 0}canvas{width:100%;height:clamp(280px,45vw,470px);display:block;touch-action:none;cursor:grab}.stamp{position:absolute;left:14px;top:13px;color:#fff;font:600 12px/1.25 system-ui;letter-spacing:.07em;border-radius:15px;background:#0b1a27d9;padding:6px 12px;pointer-events:none}.panel{padding:15px;background:#192028;border:1px solid #333e48;border-radius:12px;margin:10px 0}.sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:12px}label{font-size:14px;color:#dbe2e8}label input[type=range]{width:100%;display:block}h2{font-size:21px;margin:0}a{color:#ffb378}small{color:#a8bac6}#story{min-height:2.8em}#seek{flex:1;min-width:95px}.row+.row{margin-top:12px}output{float:right;color:#ffc698}
-.live-caption{position:absolute;inset:auto 0 0;background:linear-gradient(transparent,#071622e8 32%);padding:24px 15px 10px;color:#f1f6f7;pointer-events:none;font-size:clamp(13px,2vw,17px)}.live-caption small{color:#ffb777;font-weight:700;margin-right:10px}#chapters{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}#chapters button{font-size:13px}details{padding:12px 0;color:#c5ced6}summary{cursor:pointer;color:#ffc18c}#phaseName{display:block;font-size:clamp(20px,3vw,30px);line-height:1.16;color:#fff;margin:3px 0;text-shadow:0 1px 6px #000}.live-caption{background:linear-gradient(transparent,#091923f5 35%);padding-top:36px}#chapter{letter-spacing:.04em}</style><link href="trinity.css" rel="stylesheet"><link href="archivo-escenas.css" rel="stylesheet"><main><small>ÓRBITA by Daviel</small><h1 id="title"></h1><nav id="modes"></nav><section id="trinityArchive" hidden></section><div id="legacyLab"><div class="scene"><canvas id="view" role="img"></canvas><span class="stamp" id="stamp"></span><div class="live-caption" aria-live="polite"><small id="chapter"></small><strong id="phaseName"></strong><span id="caption"></span></div></div><div class="panel"><div class="row" id="presets"></div><div id="weatherOptions" class="row" style="margin-top:10px"><button id="orbit"></button><label id="catLabel"></label><select id="category"></select><small id="winds"></small></div><div class="sliders" id="ranges"></div><div class="row" style="margin-top:12px" id="layers"></div></div><div class="panel"><div class="row"><button id="play"></button><button id="reset"></button><select id="speed"></select><input id="seek" type="range" min="0" max="1000" value="1000"></div></div><div id="chapters"></div><details id="ny"><summary></summary><p></p><a href="https://www.nyc.gov/site/em/ready/be-ready-new-york.page" target="_blank" rel="noopener">NYC Emergency Management ↗</a></details><h2 id="stage"></h2><p id="story"></p><small id="note"></small> · <a id="source" target="_blank" rel="noopener"></a><p><small><a href="https://www.nhc.noaa.gov/aboutsshws.php">Saffir–Simpson · NHC</a> · <a href="https://github.com/mrdoob/three.js/blob/dev/examples/textures/planets/earth_atmos_2048.jpg">Earth texture · three.js</a></small></p></div></main>
+.live-caption{position:absolute;inset:auto 0 0;background:linear-gradient(transparent,#071622e8 32%);padding:24px 15px 10px;color:#f1f6f7;pointer-events:none;font-size:clamp(13px,2vw,17px)}.live-caption small{color:#ffb777;font-weight:700;margin-right:10px}#chapters{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}#chapters button{font-size:13px}details{padding:12px 0;color:#c5ced6}summary{cursor:pointer;color:#ffc18c}#phaseName{display:block;font-size:clamp(20px,3vw,30px);line-height:1.16;color:#fff;margin:3px 0;text-shadow:0 1px 6px #000}.live-caption{background:linear-gradient(transparent,#091923f5 35%);padding-top:36px}#chapter{letter-spacing:.04em}
+#modes{margin:12px 0 16px}#modes a{padding:7px 13px;border-radius:8px;border:1px solid #4c535d;text-decoration:none;color:#eee9e2;font-size:14px}
+#modes a[aria-current=page]{background:#ffa45c;color:#221407;border-color:#ffa45c}
+#modes a:last-child{margin-left:auto;color:#f6bf91;border-color:transparent}
+#modes a:focus-visible{outline:3px solid #6fd7ed}
+</style><main><small>ÓRBITA by Daviel</small><h1 id="title"></h1><nav id="modes" aria-label="Laboratorios"><a id="stormLink" aria-current="page" href="atmosfera.html">Huracanes</a><a id="earthLink" href="globo.html" target="_top">Globo 3D</a><a id="languageLink" href="atmosfera.html?lang=en">English</a></nav><div id="weatherLab"><div class="scene"><canvas id="view" role="img"></canvas><span class="stamp" id="stamp"></span><div class="live-caption" aria-live="polite"><small id="chapter"></small><strong id="phaseName"></strong><span id="caption"></span></div></div><div class="panel"><div class="row" id="presets"></div><div id="weatherOptions" class="row" style="margin-top:10px"><button id="orbit"></button><label id="catLabel"></label><select id="category"></select><small id="winds"></small></div><div class="sliders" id="ranges"></div><div class="row" style="margin-top:12px" id="layers"></div></div><div class="panel"><div class="row"><button id="play"></button><button id="reset"></button><select id="speed"></select><input id="seek" type="range" min="0" max="1000" value="1000"></div></div><div id="chapters"></div><h2 id="stage"></h2><p id="story"></p><small id="note"></small> · <a id="source" target="_blank" rel="noopener"></a><p><small><a href="https://www.nhc.noaa.gov/aboutsshws.php">Saffir–Simpson · NHC</a> · <a href="https://github.com/mrdoob/three.js/blob/dev/examples/textures/planets/earth_atmos_2048.jpg">Earth texture · three.js</a></small></p></div></main>
 <script>
 'use strict';
 const en=new URLSearchParams(location.search).get('lang')==='en',t=(a,b)=>en?b:a,$=s=>document.querySelector(s);
 document.documentElement.lang=en?'en':'es';
+document.title=t('Huracanes en 3D','Hurricanes in 3D')+' · Órbita by Daviel';
+$('#modes').setAttribute('aria-label',t('Laboratorios','Labs'));
+$('#stormLink').textContent=t('Huracanes','Hurricanes');
+$('#stormLink').href='atmosfera.html'+(en?'?lang=en':'');
+$('#earthLink').textContent=t('Globo 3D','3D globe');
+$('#earthLink').href='globo.html'+(en?'?lang=en':'');
+$('#languageLink').textContent=en?'Español':'English';
+$('#languageLink').href='atmosfera.html'+(en?'':'?lang=en');
+$('#languageLink').lang=en?'es':'en';
 const canvas=$('#view'),ctx=canvas.getContext('2d'),tau=Math.PI*2,rad=Math.PI/180,clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,f)=>a+(b-a)*f;
 let seed=4141;function rand(){seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296}
-const clouds=[],smoke=[],textures=[];
+const clouds=[],textures=[];
 for(let j=0;j<8;j++){let c=document.createElement('canvas');c.width=c.height=96;let g=c.getContext('2d');
 for(let k=0;k<86;k++){let a=rand()*tau,r=Math.sqrt(rand())*28,x=48+r*Math.cos(a),y=48+r*Math.sin(a),s=8+rand()*10,lit=clamp(.72-(x+y-85)/135+rand()*.22,0,1),v=Math.round(110+140*lit);let grad=g.createRadialGradient(x-s*.18,y-s*.3,0,x,y,s);grad.addColorStop(0,'rgba('+v+','+(v+2)+','+Math.min(255,v+7)+',.79)');grad.addColorStop(.60,'rgba('+v+','+(v+2)+','+Math.min(255,v+7)+',.55)');grad.addColorStop(1,'rgba(116,143,165,0)');g.fillStyle=grad;g.fillRect(x-s,y-s,s*2,s*2)}textures.push(c)}
 for(let i=0;i<2100;i++){let u=rand(),r=u<.32?13+rand()*27:27+Math.pow(rand(),.76)*134,a=i%4*tau/4-r*.025+(rand()-.5)*(.28+r*.004),n=rand();
 clouds.push({r,a,h:(4+23*Math.exp(-Math.pow((r-22)/13,2))+8*(1-r/170))*n+2,s:4+rand()*9,tex:i%8,ox:Math.cos(i%9*2.4)*86+(rand()-.5)*43,oy:Math.sin(i%9*2.4)*75+(rand()-.5)*44,n})}
-for(let i=0;i<950;i++){let a=rand()*tau,b=rand()*tau,n=rand();smoke.push({a,b,n,r:Math.sqrt(rand()),s:3+rand()*6,tex:i%8})}
-let mode=0,p=0,playing=false,last=0,yaw=18,tilt=42,zoom=.87,axis=true,cut=false,air=true,frame=0;
-const titles=[t('Anatomía de un huracán','Anatomy of a hurricane'),t('Archivo nuclear','Nuclear archive'),t('Nueva York · Camino al refugio','New York · Finding shelter')];
+let p=0,playing=false,last=0,yaw=18,tilt=42,zoom=.87,axis=true,cut=false,air=true,frame=0;
+const title=t('Anatomía de un huracán','Anatomy of a hurricane');
 const stages=[
 [t('Tormentas dispersas','Scattered thunderstorms'),t('El océano cálido aporta vapor de agua. El aire húmedo asciende, se enfría y forma nubes. Solo algunas perturbaciones encuentran condiciones para organizarse.','A warm ocean supplies water vapor. Moist air rises, cools and forms clouds. Only some disturbances find the conditions to organize.')],
 [t('Depresión tropical','Tropical depression'),t('Los vientos cerca de la superficie empiezan a circular alrededor de un centro de baja presión. La línea señala el eje aproximado una vez que se establece el giro.','Near-surface winds begin to circle a low-pressure center. The line marks the approximate axis once that circulation forms.')],
 [t('Tormenta tropical','Tropical storm'),t('La condensación libera calor dentro de las nubes. Si el viento cambia poco con la altura, las tormentas pueden mantenerse cerca del centro y agruparse en bandas curvas.','Condensation releases heat inside the clouds. When winds change little with height, storms can stay near the center and organize into curved bands.')],
 [t('Huracán maduro','Mature hurricane'),t('La línea naranja atraviesa el ojo y marca el eje alrededor del cual gira el sistema. Activa el corte para ver el aire que entra por la superficie, asciende en la pared del ojo y sale en altura. En el ojo, el aire suele descender.','The orange line passes through the eye, marking the axis of rotation. Use the cutaway to see air flowing inward near the surface, rising in the eyewall and spreading outward aloft. Air generally sinks in the eye.')]];
-const archive=[
-[t('Luz inicial','Initial glow'),t('Trinity tuvo lugar el 16 de julio de 1945 en Nuevo México. Esta reconstrucción visual comienza con el resplandor sobre el desierto.','Trinity took place in New Mexico on July 16, 1945. This visual reconstruction starts with the glow over the desert.')],
-[t('Columna ascendente','Rising column'),t('El gas caliente y menos denso asciende. El aire y el polvo arrastrados desde abajo hacen visible una columna bajo la nube.','Hot, less dense gas rises. Air and dust drawn up from below make a column visible beneath the cloud.')],
-[t('Nube en expansión','Spreading cloud'),t('La parte superior se ensancha. Sus bordes se enrollan al mezclarse con el aire que la rodea. La forma y el color cambian mientras se enfría.','The top spreads outward. Its edges roll as they mix with surrounding air. The shape and color change as the cloud cools.')]];
 function btn(parent,name,fun){let b=document.createElement('button');b.textContent=name;b.onclick=fun;parent.append(b);return b}
-const modeBtns=[t('Huracán','Hurricane'),t('Archivo nuclear','Nuclear archive'),t('Nueva York · Refugio','New York · Shelter')].map((label,index)=>btn($('#modes'),label,()=>selectLab(index,true)));
 const angles=[[18,42,.87],[0,89,.86],[35,13,1.1],[65,39,.56]];
 let presets=[t('Oblicua','Oblique'),t('Desde arriba','Overhead'),t('De lado','Side'),t('Desde lejos','Distant')].map((s,i)=>btn($('#presets'),s,()=>preset(i)));
 let space=false,category=3;
@@ -59,95 +73,62 @@ function refresh(){$('#orbit').setAttribute('aria-pressed',space);[yaw,tilt,zoom
 $('#reset').textContent=t('Reiniciar','Restart');$('#reset').onclick=()=>{p=0;playing=false;update()};
 $('#speed').setAttribute('aria-label',t('Velocidad','Speed'));for(let [v,s] of [[1,'Normal'],[.25,t('Cámara lenta','Slow motion')]])$('#speed').add(new Option(s+' · '+v+'×',v));
 $('#play').onclick=()=>{if(!playing&&p>=1)p=0;playing=!playing;last=0;update()};$('#seek').setAttribute('aria-label',t('Etapa de formación','Formation timeline'));$('#seek').oninput=e=>{playing=false;p=e.target.value/1000;update()};
-const lessons=[
-[[0,t('Evaporación','Evaporation'),t('El agua cálida aporta vapor al aire que asciende.','Warm water supplies vapor to the rising air.')],[.16,t('Condensación','Condensation'),t('Al subir, el aire se enfría. El vapor forma gotas y libera calor.','Rising air cools. Vapor condenses into droplets and releases heat.')],[.32,t('Circulación','Circulation'),t('Las tormentas se organizan alrededor de una baja presión compartida.','Storms organize around a common low-pressure center.')],[.51,t('Bandas de lluvia','Rainbands'),t('Las nubes se agrupan en bandas curvas que giran alrededor del centro.','Clouds organize into curved bands around the center.')],[.75,t('Pared del ojo','Eyewall'),t('El aire húmedo asciende con fuerza en el anillo que rodea el ojo.','Moist air rises vigorously in the ring surrounding the eye.')],[.90,t('Ojo','Eye'),t('Dentro del anillo, el aire suele descender y quedan menos nubes.','Inside the ring, air generally sinks and fewer clouds remain.')]],
-[[0,t('Resplandor','Glow'),t('El gas extremadamente caliente emite luz. La escena atenúa el brillo.','Extremely hot gas emits light. The scene shows a subdued glow.')],[.33,t('Ascenso','Ascent'),t('La masa de gas caliente asciende y arrastra aire y polvo hacia la columna.','The hot gas rises, drawing air and dust into the column.')],[.67,t('Expansión','Spreading'),t('La parte superior se ensancha y se mezcla con el aire circundante.','The top spreads outward and mixes with surrounding air.')]]];
-lessons.push([[0,t('Recibir la alerta','Receive the alert'),t('La persona en naranja está en la calle cuando llega el aviso. Sigue su recorrido.','The person in orange is outdoors when the alert arrives. Follow their route.')],[.22,t('Entrar en un edificio','Get inside'),t('La persona entra al edificio cercano. Los puntos violetas representan material radiactivo en el exterior.','The person enters the nearby building. Violet dots represent radioactive material outside.')],[.62,t('Buscar el interior','Move farther inside'),t('Dentro, se aleja de las ventanas y busca el centro del edificio.','Inside, they move away from windows toward the center of the building.')],[.85,t('Seguir los avisos','Follow official updates'),t('Permanece bajo techo y consulta los avisos oficiales antes de salir.','Stay indoors and follow official updates before going outside.')]]);
-let lessonMode=-1,activeLesson=-1;
-function explain(){let items=lessons[mode];if(lessonMode!==mode){lessonMode=mode;activeLesson=-1;$('#chapters').replaceChildren();items.forEach(([at,title])=>btn($('#chapters'),title,()=>{p=at;playing=false;update()}));$('#ny').hidden=!mode}
-let n=items.reduce((best,item,i)=>p>=item[0]?i:best,0);if(n===activeLesson)return;activeLesson=n;$('#phaseName').textContent=items[n][1];$('#chapter').textContent=t('Etapa ','Stage ')+(n+1)+' / '+items.length;$('#caption').textContent=items[n][2];Array.from($('#chapters').children).forEach((b,i)=>b.setAttribute('aria-pressed',i===n))}
-$('#ny summary').textContent=t('Nueva York · Efectos generales y protección','New York · General effects and protection');
-$('#ny p').textContent=t('La onda de presión puede romper ventanas y dañar estructuras. El calor puede provocar incendios. Después, las partículas radiactivas pueden depositarse fuera. Si hay una alerta en Nueva York, entra en un edificio, aléjate de las ventanas y sigue las instrucciones oficiales.','A pressure wave can break windows and damage structures. Heat can start fires. Radioactive particles can settle outdoors afterward. During an alert in New York, get inside a building, move away from windows and follow official instructions.');
-function update(){explain();$('#weatherOptions').style.display=mode?'none':'flex';$('#winds').textContent=t('Viento sostenido al madurar · ','Sustained wind at maturity · ')+windRanges[category-1]+' km/h';let history=mode===1,st=history?archive[Math.min(2,Math.floor(p*3))]:stages[Math.min(3,Math.floor(p*4))];$('#title').textContent=titles[mode];$('#stamp').textContent=history?'TRINITY / 1945':t('ATLÁNTICO NORTE','NORTH ATLANTIC');canvas.setAttribute('aria-label',titles[mode]);$('#stage').textContent=st[0]+(!mode&&p>=.75?t(' · Categoría ',' · Category ')+category:'');$('#story').textContent=st[1];$('#layers').style.display=history?'none':'flex';$('#note').textContent=history?t('Reconstrucción artística sin escala física. Fuente histórica','Artistic reconstruction without physical scale. Historical source'):t('Modelo educativo con altura exagerada. Arrastra para girar. Fuente','Educational model with exaggerated height. Drag to orbit. Source');$('#source').textContent=history?'U.S. Department of Energy':'NOAA';$('#source').href=history?'https://www.energy.gov/lm/trinity-site-worlds-first-nuclear-explosion':'https://www.noaa.gov/jetstream/tropical/tropical-cyclone-introduction/tropical-cyclone-structure';if(mode===2){const lesson=lessons[2][activeLesson];$('#stage').textContent=lesson[1];$('#story').textContent=t('Escena ilustrativa de una calle de Nueva York. El color señala material radiactivo invisible a simple vista. La densidad de puntos no mide una dosis.','Illustration of a New York street. Color marks radioactive material that cannot be seen with the naked eye. Dot density does not measure a dose.');$('#stamp').textContent='NEW YORK';$('#layers').style.display='none';$('#note').textContent=t('Guía de protección civil','Emergency preparedness guide');$('#source').textContent='NYC Emergency Management';$('#source').href='https://www.nyc.gov/site/em/ready/be-ready-new-york.page'}modeBtns.forEach((b,i)=>b.setAttribute('aria-pressed',i===mode));$('#play').textContent=playing?t('Pausar','Pause'):p===1?t('Ver formación','Watch formation'):t('Reproducir','Play');$('#seek').value=p*1000;queue()}
+const lessons=[[0,t('Evaporación','Evaporation'),t('El agua cálida aporta vapor al aire que asciende.','Warm water supplies vapor to the rising air.')],[.16,t('Condensación','Condensation'),t('Al subir, el aire se enfría. El vapor forma gotas y libera calor.','Rising air cools. Vapor condenses into droplets and releases heat.')],[.32,t('Circulación','Circulation'),t('Las tormentas se organizan alrededor de una baja presión compartida.','Storms organize around a common low-pressure center.')],[.51,t('Bandas de lluvia','Rainbands'),t('Las nubes se agrupan en bandas curvas que giran alrededor del centro.','Clouds organize into curved bands around the center.')],[.75,t('Pared del ojo','Eyewall'),t('El aire húmedo asciende con fuerza en el anillo que rodea el ojo.','Moist air rises vigorously in the ring surrounding the eye.')],[.90,t('Ojo','Eye'),t('Dentro del anillo, el aire suele descender y quedan menos nubes.','Inside the ring, air generally sinks and fewer clouds remain.')]];
+let activeLesson=-1;
+lessons.forEach(([at,name])=>btn($('#chapters'),name,()=>{p=at;playing=false;update()}));
+function explain() {
+    const index=lessons.reduce((best,item,i)=>p>=item[0]?i:best,0);
+    if(index===activeLesson)return;
+    activeLesson=index;
+    const [,name,caption]=lessons[index];
+    $('#phaseName').textContent=name;
+    $('#chapter').textContent=t('Etapa ','Stage ')+(index+1)+' / '+lessons.length;
+    $('#caption').textContent=caption;
+    Array.from($('#chapters').children).forEach((b,i)=>b.setAttribute('aria-pressed',i===index));
+}
+$('#title').textContent=title;
+canvas.setAttribute('aria-label',title);
+$('#stamp').textContent=t('ATLÁNTICO NORTE','NORTH ATLANTIC');
+$('#note').textContent=t('Modelo educativo con altura exagerada. Arrastra para girar.','Educational model with exaggerated height. Drag to orbit.');
+$('#source').textContent='NOAA';
+$('#source').href='https://www.noaa.gov/jetstream/tropical/tropical-cyclone-introduction/tropical-cyclone-structure';
+function update() {
+    explain();
+    $('#winds').textContent=t('Viento sostenido al madurar · ','Sustained wind at maturity · ')+windRanges[category-1]+' km/h';
+    const stage=stages[Math.min(3,Math.floor(p*4))];
+    $('#stage').textContent=stage[0]+(p>=.75?t(' · Categoría ',' · Category ')+category:'');
+    $('#story').textContent=stage[1];
+    $('#play').textContent=playing?t('Pausar','Pause'):p===1?t('Ver formación','Watch formation'):t('Reproducir','Play');
+    $('#seek').value=p*1000;
+    queue();
+}
 let drag=null;canvas.onpointerdown=e=>{canvas.setPointerCapture(e.pointerId);drag=[e.clientX,e.clientY,yaw,tilt]};canvas.onpointermove=e=>{if(!drag)return;yaw=((drag[2]+(e.clientX-drag[0])*.55+540)%360)-180;tilt=clamp(drag[3]-(e.clientY-drag[1])*.35,6,89);refresh()};canvas.onpointerup=canvas.onpointercancel=()=>drag=null;
 function queue(){if(!frame)frame=requestAnimationFrame(draw)}
-function draw(now){frame=0;if($('#legacyLab').hidden)return;if(playing){if(last)p=Math.min(1,p+Math.min(100,now-last)/32000*+$('#speed').value);last=now;if(p===1)playing=false;update()}
+function draw(now){frame=0;if(playing){if(last)p=Math.min(1,p+Math.min(100,now-last)/32000*+$('#speed').value);last=now;if(p===1)playing=false;update()}
 const w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(devicePixelRatio||1,1.6);if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);
-const elev=tilt*rad,cy=Math.cos(yaw*rad),sy=Math.sin(yaw*rad),ct=Math.cos(elev),st=Math.sin(elev),scale=Math.min(w/355,h/235)*zoom,origin=h*(mode?.69:.56);
+const elev=tilt*rad,cy=Math.cos(yaw*rad),sy=Math.sin(yaw*rad),ct=Math.cos(elev),st=Math.sin(elev),scale=Math.min(w/355,h/235)*zoom,origin=h*.56;
 function proj(x,y,z){let side=x*cy-y*sy,depth=x*sy+y*cy;return [w/2+side*scale,origin+(depth*st-z*ct)*scale,depth*ct+z*st]}
-if(!mode&&space){orbitalView(w,h);return}if(mode===2){drawStreet(ctx,proj,w,h,scale,p);return}
-let bg=ctx.createLinearGradient(0,0,w*.4,h);for(let [a,c] of (mode?[[0,'#172534'],[.55,'#70625d'],[1,'#95755b']]:[[0,'#0c2439'],[.55,'#17495d'],[1,'#072939']]))bg.addColorStop(a,c);ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+if(space){orbitalView(w,h);return}
+let bg=ctx.createLinearGradient(0,0,w*.4,h);for(let [a,c] of [[0,'#0c2439'],[.55,'#17495d'],[1,'#072939']])bg.addColorStop(a,c);ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
 function path(points,color,width,dash=[]){ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([])}
-if(!mode){let A=proj(-510,-510,0),B=proj(510,-510,0),C=proj(-510,510,0);ctx.save();ctx.transform((B[0]-A[0])/512,(B[1]-A[1])/512,(C[0]-A[0])/512,(C[1]-A[1])/512,A[0],A[1]);ctx.drawImage(sea,0,0);ctx.restore()}
+{let A=proj(-510,-510,0),B=proj(510,-510,0),C=proj(-510,510,0);ctx.save();ctx.transform((B[0]-A[0])/512,(B[1]-A[1])/512,(C[0]-A[0])/512,(C[1]-A[1])/512,A[0],A[1]);ctx.drawImage(sea,0,0);ctx.restore()}
 for(let i=-360;i<=360;i+=72){path([proj(i,-360,0),proj(i,360,0)],'rgba(200,225,230,.035)',1);path([proj(-360,i,0),proj(360,i,0)],'rgba(200,225,230,.035)',1)}
 // Fine surface streaks give the moving cloud shadows a fixed visual reference.
-for(let i=0;i<570;i++){let x=((i*137)%827)-413,y=((i*79)%487)-243;path([proj(x,y,0),proj(x+2+3*Math.sin(i),y+.4,0)],mode?'rgba(237,196,150,.12)':'rgba(147,214,222,.16)',1)}
-let sprites=[];if(!mode){let f=p*p*(3-2*p);for(let c of clouds){let a=c.a-p*(1.6+.28*category),r=c.r,x=mix(c.ox,r*Math.cos(a),f),y=mix(c.oy,r*Math.sin(a),f),z=1+c.h*(.27+.43*p);if(cut&&x*sy+y*cy>0)continue;if(c.tex===0){let shadow=proj(x+z*.33,y+z*.2,0);ctx.fillStyle='rgba(1,18,35,.075)';ctx.beginPath();ctx.ellipse(shadow[0],shadow[1],c.s*scale*1.4,Math.max(.6,c.s*scale*st),0,0,tau);ctx.fill()}let point=proj(x,y,z);sprites.push([point,c.s*(.67+.43*p)*scale,c.tex])}}
-else{for(let c of smoke){let cap=c.tex<5,a=c.a+.22*p,r=cap?(18+39*p+8*Math.cos(c.b))*c.r:5+(8+7*p)*c.r*(1+.35*Math.sin(c.b));let z=cap?(.8+.25*Math.sin(c.b)*c.r)*105*p+5:c.n*95*p;let pt=proj(Math.cos(a)*r*Math.min(1,.15+p*4),Math.sin(a)*r*Math.min(1,.15+p*4),z);sprites.push([pt,c.s*(.5+p)*scale,c.tex])}}
+for(let i=0;i<570;i++){let x=((i*137)%827)-413,y=((i*79)%487)-243;path([proj(x,y,0),proj(x+2+3*Math.sin(i),y+.4,0)],'rgba(147,214,222,.16)',1)}
+let sprites=[];{let f=p*p*(3-2*p);for(let c of clouds){let a=c.a-p*(1.6+.28*category),r=c.r,x=mix(c.ox,r*Math.cos(a),f),y=mix(c.oy,r*Math.sin(a),f),z=1+c.h*(.27+.43*p);if(cut&&x*sy+y*cy>0)continue;if(c.tex===0){let shadow=proj(x+z*.33,y+z*.2,0);ctx.fillStyle='rgba(1,18,35,.075)';ctx.beginPath();ctx.ellipse(shadow[0],shadow[1],c.s*scale*1.4,Math.max(.6,c.s*scale*st),0,0,tau);ctx.fill()}let point=proj(x,y,z);sprites.push([point,c.s*(.67+.43*p)*scale,c.tex])}}
 sprites.sort((a,b)=>a[0][2]-b[0][2]);for(let [[x,y],s,k] of sprites)ctx.drawImage(textures[k],x-s,y-s,2*s,2*s);
-if(mode&&p<.36){let [x,y]=proj(0,0,9+68*p),r=(11+32*p)*scale,g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,'rgba(255,240,190,.93)');g.addColorStop(.5,'rgba(255,150,64,.55)');g.addColorStop(1,'rgba(255,105,23,0)');ctx.globalAlpha=Math.min(1,(.36-p)*6);ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2);ctx.globalAlpha=1}
 function arrow(points){path(points,'#a0eee9',1.8);let [x,y]=points.at(-1),[xx,yy]=points.at(-2),a=Math.atan2(y-yy,x-xx);path([[x-7*Math.cos(a-.55),y-7*Math.sin(a-.55)],[x,y],[x-7*Math.cos(a+.55),y-7*Math.sin(a+.55)]],'#a0eee9',1.8)}
-if(!mode&&air&&p>.57){for(let side of [-1,1]){let section=cut||tilt<32,pts=section?[[95,1],[55,2],[25,4],[20,14],[25,26],[48,33],[79,34]]:Array.from({length:23},(_,i)=>{let a=i/22*1.2,r=100-i*2.1;return [r*Math.cos(a),r*Math.sin(a),5]});arrow(pts.map(q=>section?proj(side*q[0]*cy,-side*q[0]*sy,q[1]):proj(side*q[0],-side*q[1],q[2])))}
+if(air&&p>.57){for(let side of [-1,1]){let section=cut||tilt<32,pts=section?[[95,1],[55,2],[25,4],[20,14],[25,26],[48,33],[79,34]]:Array.from({length:23},(_,i)=>{let a=i/22*1.2,r=100-i*2.1;return [r*Math.cos(a),r*Math.sin(a),5]});arrow(pts.map(q=>section?proj(side*q[0]*cy,-side*q[0]*sy,q[1]):proj(side*q[0],-side*q[1],q[2])))}
 if(cut&&p>.78)arrow([proj(4,0,22),proj(4,0,5)])}
 // Tracers follow the process described in the current caption, including when scrubbing.
 function tracer(x,y,z,color){let [xx,yy]=proj(x,y,z);ctx.beginPath();ctx.arc(xx,yy,Math.max(1.6,scale*1.8),0,tau);ctx.fillStyle=color;ctx.fill()}
-if(!mode&&air){for(let i=0;i<38;i++){let q=(p*(10+1.8*category)+i*.618)%1,a=i*2.4-p*4,r,z;
+if(air){for(let i=0;i<38;i++){let q=(p*(10+1.8*category)+i*.618)%1,a=i*2.4-p*4,r,z;
 if(p<.32){r=35+(i*17)%65;z=q*32;tracer(r*Math.cos(a),r*Math.sin(a),z,'rgba(149,235,239,.85)')}
 else if(p<.75){r=110-q*77;a-=q*1.4;tracer(r*Math.cos(a),r*Math.sin(a),3+q*5,'#9ae5dc')}
 else{r=i%4===0?4:20+4*q;z=i%4===0?(1-q)*24:q*31;let x=r*Math.cos(a),y=r*Math.sin(a);if(!cut||x*sy+y*cy<=0)tracer(x,y,z,'#97ede3')}}}
-if(mode&&p>.18){for(let i=0;i<55;i++){let q=(i*.618+p*6)%1,a=i*2.4,r=(3+7*q)*Math.sin(q*Math.PI);tracer(r*Math.cos(a),r*Math.sin(a),q*87*p,'rgba(228,192,151,.56)')}}
-if(!mode&&axis&&p>.25){let base=proj(0,0,0),end=proj(0,0,53);path([base,end],'#ffac66',2,[5,4]);ctx.strokeStyle='#ffad68';ctx.beginPath();ctx.arc(end[0],end[1],4,0,tau);ctx.stroke();ctx.font='600 13px system-ui';let label=t('Eje de rotación','Rotation axis'),tw=ctx.measureText(label).width,tx=clamp(end[0]+11,4,w-tw-15),ty=clamp(end[1]-22,5,h-25);ctx.fillStyle='#15232de8';ctx.fillRect(tx,ty,tw+12,23);ctx.fillStyle='#ffc28a';ctx.fillText(label,tx+6,ty+16)}
-}
-function drawStreet(g,project,w,h,scale,progress){
- const sky=g.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#213546');sky.addColorStop(1,'#63747a');g.fillStyle=sky;g.fillRect(0,0,w,h);
- function polygon(points,color){g.beginPath();points.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.fillStyle=color;g.fill()}
- function ground(x,y,dx,dy,color){polygon([[x,y],[x+dx,y],[x+dx,y+dy],[x,y+dy]].map(([a,b])=>project(a,b,0)),color)}
- ground(-250,-230,500,460,'#647175');ground(-250,-13,500,29,'#354149');for(let x=-240;x<=240;x+=24)ground(x,0,12,1,'#bca87a');for(let y=-12;y<=12;y+=4)ground(-53,y,9,2,'#b7c4c3');
- const buildings=[[-104,-66,35,34,51],[-58,-71,30,37,66],[0,-51,45,33,39],[60,-67,32,44,64],[104,-69,30,41,78],[-103,38,31,29,32],[81,39,34,35,52]];
- const faces=[];function face(v,col){const a=v.map(pt=>project(...pt));faces.push([a.reduce((z,b)=>z+b[2],0)/a.length,a,col])}
- for(const [x,y,dx,dy,z] of buildings){let shelter=x===0;const A=[x,y],B=[x+dx,y],C=[x+dx,y+dy],D=[x,y+dy],roof=[A,B,C,D];roof.forEach((a,i)=>{const b=roof[(i+1)%4];face([[...a,0],[...b,0],[...b,z],[...a,z]],shelter?['#467470','#518a83','#61978e','#345f61'][i]:['#555967','#696975','#8a7774','#646172'][i]);for(let n=1;n<6;n++)for(let k=7;k<z-2;k+=10){let v=n/6,q=v+.06,pt=(u,zz)=>[mix(a[0],b[0],u),mix(a[1],b[1],u),zz];if(shelter&&i===2&&n===3&&k===7)continue;face([pt(v,k),pt(q,k),pt(q,k+3),pt(v,k+3)],'#bfd3ca')}});face(roof.map(a=>[...a,z]),shelter?'#96b2a7':'#a19795')}
- faces.sort((a,b)=>a[0]-b[0]);faces.forEach(([,v,c])=>polygon(v,c));
- for(let i=0;i<49;i++){let x=i*47%231-115,y=i*37%26-11,z=(1-((progress*3+i*.321)%1))*11;let [a,b]=project(x,y,z);g.fillStyle='#e0b6fa';g.beginPath();g.arc(a,b,Math.max(1,scale),0,tau);g.fill()}
- let x,y;if(progress<.22){x=-35;y=11}else if(progress<.58){let u=(progress-.22)/.36;x=mix(-35,22,u);y=mix(11,-18,u)}else{x=22;y=mix(-18,-36,clamp((progress-.58)/.24,0,1))}
- let [px,py]=project(x,y,2);g.strokeStyle='#ffab59';g.lineWidth=3;g.beginPath();g.arc(px,py,7,0,tau);g.stroke();g.fillStyle='#fff1cd';g.beginPath();g.arc(px,py,3,0,tau);g.fill();
- if(progress>=.58){g.font='600 13px system-ui';let label=t('Dentro del refugio','Inside shelter');let tw=g.measureText(label).width;g.fillStyle='#172622';g.fillRect(px-tw/2-5,py-30,tw+10,18);g.fillStyle='#f6ecdc';g.fillText(label,px-tw/2,py-17)}
-}
-// The older chapter viewer also works if the optional 3D module cannot be fetched.
-let archiveViewer,archiveLoad;
-const archivePane=$('#trinityArchive');
-function selectLab(index,remember=false){
-    mode=index;
-    p=0; last=0; playing=false; cut=false;
-    const open=index===1;
-    archivePane.hidden=!open;
-    $('#legacyLab').hidden=open;
-    document.querySelector('main').classList.toggle('trinity-open',open);
-    if(archiveViewer)archiveViewer.setActive(open);
-    if(open&&!archiveLoad){
-        archivePane.textContent=t('Cargando el recorrido…','Loading the tour…');
-        archiveLoad=import('./archivo-escenas.js').then(({mountTrinity})=>{
-            archiveViewer=mountTrinity(archivePane,en);
-            archiveViewer.setActive(mode===1);
-        }).catch(()=>{
-            archiveLoad=null;
-            if(mode===1){
-                archivePane.hidden=true;
-                $('#legacyLab').hidden=false;
-                document.querySelector('main').classList.remove('trinity-open');
-                queue();
-            }
-        });
-    }
-    if(remember){
-        const url=new URL(location.href);
-        if(open)url.searchParams.set('vista','trinity');
-        else {url.searchParams.delete('vista');url.searchParams.delete('escena');}
-        if(open && archiveViewer) archiveViewer.setSceneParam(url);
-        history.replaceState(null,'',url);
-    }
-    preset(0);
-    update();
+if(axis&&p>.25){let base=proj(0,0,0),end=proj(0,0,53);path([base,end],'#ffac66',2,[5,4]);ctx.strokeStyle='#ffad68';ctx.beginPath();ctx.arc(end[0],end[1],4,0,tau);ctx.stroke();ctx.font='600 13px system-ui';let label=t('Eje de rotación','Rotation axis'),tw=ctx.measureText(label).width,tx=clamp(end[0]+11,4,w-tw-15),ty=clamp(end[1]-22,5,h-25);ctx.fillStyle='#15232de8';ctx.fillRect(tx,ty,tw+12,23);ctx.fillStyle='#ffc28a';ctx.fillText(label,tx+6,ty+16)}
 }
 new ResizeObserver(queue).observe(canvas);
-selectLab(new URLSearchParams(location.search).get('vista')==='trinity'?1:0);
+preset(0);
+update();
 </script></html>
